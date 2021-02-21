@@ -17,12 +17,12 @@ inputs:
     required: False
     default: "true"
 runs:
-  env:
-    _COVDIR: $GITHUB_ACTION_PATH/coverage_reports
   using: "composite"
   steps:
     - name: Collect Coverage Files
       if: ${{ inputs.if }}
+      env:
+        _COVDIR: $GITHUB_ACTION_PATH/coverage_reports
       run: |
         mkdir $_COVDIR
         cp "${{ inputs.coverage_path }}" "$_COVDIR/.coverage.${{ inputs.id }}"
@@ -32,4 +32,4 @@ runs:
       uses: actions/upload-artifact@v2
       with:
         name: coverage
-        path: $_COVDIR/*
+        path: $GITHUB_ACTION_PATH/coverage_reports/*
