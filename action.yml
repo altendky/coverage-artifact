@@ -16,6 +16,7 @@ runs:
   using: "composite"
   steps:
     - name: Collect Coverage Files
+      shell: bash
       env:
         _COVDIR: $GITHUB_ACTION_PATH/coverage_reports
       run: |
