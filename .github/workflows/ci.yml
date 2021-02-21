@@ -66,6 +66,8 @@ jobs:
 
     - name: Run the action
       uses: ./
+      with:
+        id: ${{ matrix.os.name }} - ${{ matrix.python.name }}
 
   check:
     name: Check
