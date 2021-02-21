@@ -1,0 +1,35 @@
+name: Upload coverage artifacts
+description: "Collect coverage records from several jobs into one artifact."
+inputs:
+  coverage_path:
+    description: "The path to the coverage records."
+    required: False
+    default: ".coverage"
+  coverage_report_path:
+    description: "The path to the coverage report."
+    required: False
+    default: "coverage.xml"
+  id:
+    description: "A unique identifier for the individual job."
+    required: True
+  if:
+    description: "Only run if this is true."
+    required: False
+    default: "true"
+runs:
+  env:
+    - _COVDIR: $GITHUB_ACTION_PATH/coverage_reports
+  using: "composite"
+  steps:
+    - name: Collect Coverage Files
+      if: ${{ inputs.if }}
+      run: |
+        mkdir $_COVDIR
+        cp "${{ inputs.coverage_path }}" "$_COVDIR/.coverage.${{ inputs.id }}"
+        cp "${{ inputs.coverage_xml_path }}" "$_COVDIR/coverage.${{ inputs.id }}.xml"
+    - name: Upload Coverage
+      if: ${{ inputs.if }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage
+        path: $_COVDIR/*
